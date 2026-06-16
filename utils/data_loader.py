@@ -1,75 +1,54 @@
 """
 Data Loader Utility
-Handles dataset acquisition, cleaning, missing values, and matrix normalization.
+Handles dataset acquisition, local file caching, cleaning, and normalization.
 """
-
+import os
 import pandas as pd
 import numpy as np
 
-def load_wine_quality_data(url: str = None) -> tuple:
+def load_wine_quality_data(file_path: str = "data/wine_quality.csv") -> tuple:
     """
-    Loads the Wine Quality dataset, cleans it, and prepares matrices.
+    Loads the Wine Quality dataset. Checks locally first, otherwise downloads from UCI.
     
-    Parameters:
-    -----------
-    url : str, optional
-        URL or local filepath to the dataset csv. Defaults to UCI repository link.
-        
     Returns:
     --------
-    X_normalized : numpy.ndarray
-        High-dimensional numerical feature matrix normalized to mean=0, std=1.
-    y : numpy.ndarray
-        Target labels (wine quality scores).
-    feature_names : list
-        Names of the chemical features.
+    X_normalized : numpy.ndarray (Standardized features)
+    y : numpy.ndarray (Target labels)
+    feature_names : list (Column headers)
     """
-    if url is None:
-        # Defaulting to the Red Wine Quality dataset from UCI Repository
-        url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
-    
-    try:
-        # Step 1: Read data (the wine dataset uses ';' as a delimiter)
-        df = pd.read_csv(url, sep=';')
-        print(f"[INFO] Successfully loaded dataset. Shape: {df.shape}")
-    except Exception as e:
-        raise IOError(f"[ERROR] Failed to load dataset from {url}: {str(e)}")
-        
-    # Step 2: Data Cleaning (Handle missing values dynamically)
-    missing_sum = df.isnull().sum().sum()
-    if missing_sum > 0:
-        print(f"[WARNING] Found {missing_sum} missing values. Imputing with column means.")
-        df = df.fillna(df.mean())
-    else:
-        print("[INFO] Data cleaning check passed: No missing values detected.")
+    # 1. Ensure the directory exists
+    directory = os.path.dirname(file_path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"[INFO] Created directory: {directory}")
 
-    # Step 3: Matrix Preparation
-    # Isolate target variable ('quality') from features
-    feature_columns = [col for col in df.columns if col != 'quality']
-    feature_names = feature_columns.copy()
-    
-    X_raw = df[feature_columns].to_numpy()
+    # 2. Check if file exists, if not, download it
+    if not os.path.exists(file_path):
+        print(f"[INFO] {file_path} not found. Downloading from UCI repository...")
+        url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
+        try:
+            df = pd.read_csv(url, sep=';')
+            df.to_csv(file_path, index=False)
+            print(f"[INFO] Successfully downloaded and cached at: {file_path}")
+        except Exception as e:
+            raise IOError(f"[ERROR] Could not download dataset: {e}")
+    else:
+        df = pd.read_csv(file_path)
+        print(f"[INFO] Loaded dataset from local file: {file_path}")
+
+    # 3. Data Cleaning (Handling missing values)
+    if df.isnull().values.any():
+        print(f"[WARNING] Missing values detected. Imputing with mean.")
+        df = df.fillna(df.mean())
+
+    # 4. Preparation
+    feature_cols = [c for c in df.columns if c != 'quality']
+    X = df[feature_cols].to_numpy()
     y = df['quality'].to_numpy()
     
-    # Step 4: Standardization from Scratch (Z-score normalization)
-    # Calculate mean and standard deviation along the columns (axis=0)
-    mean = np.mean(X_raw, axis=0)
-    std = np.std(X_raw, axis=0)
+    # 5. Normalization (Standardization)
+    mean, std = np.mean(X, axis=0), np.std(X, axis=0)
+    std[std == 0] = 1e-8  # Prevent division by zero
+    X_normalized = (X - mean) / std
     
-    # Avoid potential division by zero if a feature has zero variance
-    std[std == 0] = 1e-8
-    
-    # Apply standardizing mathematical operation
-    X_normalized = (X_raw - mean) / std
-    
-    print("[INFO] Matrix preparation complete. Feature matrix standardized successfully.")
-    return X_normalized, y, feature_names
-
-if __name__ == "__main__":
-    # Quick standalone testing for structural verification
-    try:
-        X, y, features = load_wine_quality_data()
-        print(f"Verified Matrix Target Format: Matrix Shape={X.shape}, Labels Shape={y.shape}")
-        print(f"Verified Feature Bounds: Calculated Mean={np.mean(X, axis=0)[0]:.4f} (Expected: 0)")
-    except Exception as error:
-        print(f"Testing failed: {error}")
+    return X_normalized, y, feature_cols

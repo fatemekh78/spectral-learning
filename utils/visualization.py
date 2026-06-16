@@ -99,7 +99,7 @@ def plot_feature_loadings(components_matrix, feature_names):
     axes[1].grid(True, linestyle=':', alpha=0.6)
 
     plt.tight_layout()
-    plt.savefig("data/feature_loadings.png", dpi=300)
+    plt.savefig("outputs/figures/feature_loadings.png", dpi=300)
     plt.close()
     print("✅ Saved feature interpretability matrix: 'data/feature_loadings.png'")
 

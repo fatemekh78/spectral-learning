@@ -1,3 +1,7 @@
+"""
+Matrix Operations Utility
+Provides reusable mathematical building blocks for custom PCA and SVD scripts.
+"""
 import numpy as np
 
 def compute_eigen_decomposition(symmetric_matrix):
@@ -22,6 +26,9 @@ def project_into_latent_space(X, components, num_dimensions):
     """
     Projects the normalized data matrix onto the top 'num_dimensions' principal components.
     """
+    if num_dimensions > components.shape[1]:
+        raise ValueError(f"Cannot select {num_dimensions} components from a matrix with {components.shape[1]} columns.")
+        
     # Select the top k components (columns)
     selected_components = components[:, :num_dimensions]
     

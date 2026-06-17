@@ -26,20 +26,17 @@ This project implements a complete, end-to-end machine learning pipeline from sc
 1. Ensure you have Python 3.9+ installed.
 2. Open your terminal and navigate to the project directory.
 3. Install the required dependencies:
-   ```bash
+```bash
    pip3 install -r requirements.txt
 
 ```
 
 ---
-
-
 ## Usage Guidelines
 
 To execute the full benchmarking pipeline and view the 6-panel comprehensive dashboard, run:
-
 ```bash
-python main.py
+python3 main.py
 
 ```
 

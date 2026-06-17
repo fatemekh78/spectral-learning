@@ -1,7 +1,10 @@
 
+```markdown
 # Spectral Learning and Dimensionality Reduction Pipeline
 
 [![Project Dashboard](images/Figure_1.png)](images/Figure_1.png)
+
+---
 
 ## Project Overview & Objectives
 This project implements a complete, end-to-end machine learning pipeline from scratch to explore spectral learning and dimensionality reduction. The core focus is mathematically decomposing the UCI Wine Quality dataset to its principal components and benchmarking traditional linear reduction techniques against advanced non-linear manifold learning architectures (t-SNE and UMAP).
@@ -43,7 +46,7 @@ python main.py
 To run the automated testing suite and verify the mathematical integrity of the scratch models, run:
 
 ```bash
-pytho3 -m unittest discover -s tests
+python3 -m unittest discover -s tests
 
 ```
 
@@ -85,12 +88,16 @@ The number of linear components was explicitly chosen as $k=3$, justified by the
 
 By extracting the top eigenvectors (`self.components_`) from our custom covariance and Gram matrices, the pipeline achieves deep feature interpretability. Analyzing the weights (loadings) of these components allows us to understand exactly which original chemical properties of the wine (e.g., alcohol content, acidity, or sulphates) are the primary drivers of variance within the dataset.
 
-### Linear vs. Non-Linear Benchmarking Observations
+### 🔄 PCA vs. SVD Alignment (Linear Paradigm)
 
-The visual output of our 6-panel dashboard reveals critical architectural trade-offs:
+In the top row of the dashboard, the 2D scatter plots for the custom **PCA Subspace** and **SVD Subspace** yield geometrically identical layouts that are simply rotated or mirrored versions of one another. This provides an immediate, visual mathematical proof that our from-scratch implementations are 100% accurate. Because PCA via covariance eigen-decomposition and SVD via Gram matrix ($X^T X$) factorization share underlying singular values, their latent spaces map the data structures identically.
 
-* **The Linear Subspace (PCA/SVD):** Captures global variance perfectly. The identical, mirrored geometric layouts between the custom PCA and SVD components validate the mathematical precision of our scratch-built matrix equations.
-* **The Non-Linear Manifold (t-SNE/UMAP):** Unlocks deep structural patterns that linear math cannot capture. UMAP successfully breaks down the dense feature clusters into highly isolated, distinct spatial islands, demonstrating superior localized data separability.
+### 🕸️ t-SNE vs. UMAP Behavior (Non-Linear Paradigm)
+
+The bottom row highlights how non-linear manifold learning approaches capture structural patterns that linear math cannot compress effectively:
+
+* **t-SNE Projections:** This algorithm maps the wine dataset into a broad, continuous spatial structure. By converting high-dimensional Euclidean distances into conditional probabilities, it focuses tightly on preserving localized neighborhoods.
+* **UMAP Projections:** UMAP takes structural extraction a step further by preserving both local and global geometric distances. It constructs a fuzzy simplicial set that completely breaks the dense feature clusters into highly isolated, distinct spatial islands with wide, clean margins between groupings.
 
 ---
 
@@ -101,15 +108,8 @@ The pipeline includes strict error-handling mechanisms to ensure production-grad
 * **Data Resilience:** The data loader automatically detects missing local files and handles web-request fallbacks to download the source data dynamically. It seamlessly cleans data inconsistencies by executing column-mean imputation on null fields.
 * **Numerical Stability:** The custom matrix factorization algorithms utilize optimized Gram matrix computations to guarantee numerical convergence during eigen-decomposition, preventing memory exceptions on dense inputs.
 
-
 ```
 
-### 🔄 PCA vs. SVD Alignment (Linear Paradigm)
-In the top row of the dashboard, the 2D scatter plots for the custom **PCA Subspace** and **SVD Subspace** yield geometrically identical layouts that are simply rotated or mirrored versions of one another. This provides an immediate, visual mathematical proof that our from-scratch implementations are 100% accurate. Because PCA via covariance eigen-decomposition and SVD via Gram matrix ($X^T X$) factorization share underlying singular values, their latent spaces map the data structures identically.
+Are you ready to commit this to your GitHub repository, or do you need help writing a clean, professional commit message for this final documentation update?
 
-### 🕸️ t-SNE vs. UMAP Behavior (Non-Linear Paradigm)
-The bottom row highlights how non-linear manifold learning approaches capture structural patterns that linear math cannot compress effectively:
-* **t-SNE Projections:** This algorithm maps the wine dataset into a broad, continuous spatial structure. By converting high-dimensional Euclidean distances into conditional probabilities, it focuses tightly on preserving localized neighborhoods.
-* **UMAP Projections:** UMAP takes structural extraction a step further by preserving both local and global geometric distances. It constructs a fuzzy simplicial set that completely breaks the dense feature clusters into highly isolated, distinct spatial islands with wide, clean margins between groupings.
-
----
+```

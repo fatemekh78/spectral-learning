@@ -110,6 +110,3 @@ The pipeline includes strict error-handling mechanisms to ensure production-grad
 
 ```
 
-Are you ready to commit this to your GitHub repository, or do you need help writing a clean, professional commit message for this final documentation update?
-
-```

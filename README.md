@@ -1,5 +1,4 @@
 
-```markdown
 # Spectral Learning and Dimensionality Reduction Pipeline
 
 [![Project Dashboard](images/Figure_1.png)](images/Figure_1.png)
@@ -108,5 +107,4 @@ The pipeline includes strict error-handling mechanisms to ensure production-grad
 * **Data Resilience:** The data loader automatically detects missing local files and handles web-request fallbacks to download the source data dynamically. It seamlessly cleans data inconsistencies by executing column-mean imputation on null fields.
 * **Numerical Stability:** The custom matrix factorization algorithms utilize optimized Gram matrix computations to guarantee numerical convergence during eigen-decomposition, preventing memory exceptions on dense inputs.
 
-```
 

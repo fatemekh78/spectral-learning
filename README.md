@@ -33,11 +33,11 @@ This project implements a complete, end-to-end machine learning pipeline from sc
 
 ---
 
+
 ## Usage Guidelines
 
 To execute the full benchmarking pipeline and view the 6-panel comprehensive dashboard, run:
 
-```bash
 python main.py
 
 ```

@@ -77,7 +77,7 @@ def plot_feature_loadings(components_matrix, feature_names):
     Visualizes how much each raw feature contributes to the top 2 Principal Components.
     This fulfills the feature interpretability requirements of the rubric.
     """
-    # Fixed Indentation: Everything inside this function block is now correctly shifted
+    
     loadings_df = pd.DataFrame(
         components_matrix[:, :2], 
         index=feature_names, 

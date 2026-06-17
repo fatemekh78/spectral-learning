@@ -129,6 +129,12 @@ def main():
 
     plt.tight_layout()
     print("\n[Success] Dashboard initialized safely. Close graph window to cleanly exit pipeline.")
+   
+    output_path = "/Users/fatemeh.kheirkhah/Desktop/spectral-learning/images/Figure_1.png"
+    
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"[INFO] Dashboard successfully saved to: {output_path}")
+    
     plt.show()
 
 if __name__ == "__main__":
